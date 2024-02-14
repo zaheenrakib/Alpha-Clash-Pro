@@ -13,6 +13,11 @@
 function handleKeyboardButtonPress(event){
     const playerPressed = event.key;
 
+    //stop the game is pressed 'Esc'
+    if(playerPressed === 'Escaped'){
+        gameOver();
+    }
+
     //get the expected to press
     const currentAlphabetElement = document.getElementById('current-alphabet');
     const currentAlphabet = currentAlphabetElement.innerText;
@@ -49,13 +54,13 @@ function handleKeyboardButtonPress(event){
     else{
         console.log("You missed you lost a life");
 
-
-
         const currentLife = getTextElementvalueById('current-life');
         const updatedLife = currentLife - 1;
         setTextElementValueById('current-life',updatedLife);
 
-
+        if(updatedLife === 0){
+            gameOver();
+        }
 
         // //step 1: get the current life number
         // const currentLifeElement = document.getElementById('current-life');
@@ -86,7 +91,31 @@ function continueGame(){
 }
 
 function play(){
+    //Hide everting show only the playground
     hiddenElementById('home-screen');
     showElementById('play-ground');
+
+    //reset score and life
+    setTextElementValueById('current-life',5);
+    setTextElementValueById('current-score' , 0);
+
+
+
     continueGame();
+}
+
+function gameOver(){
+    hiddenElementById('play-ground');
+    showElementById('final-score');
+    //update final score
+    // 1 get the final score
+
+    const lastScore = getTextElementvalueById('current-score');
+    console.log(lastScore);
+    setTextElementValueById('last-score',lastScore);
+
+    // clear the last highlight alphabet
+    const currentAlphabet = getElementById('current-alphabet');
+    // console.log(currentAlphabet);
+    removeBackgroundColorById(currentAlphabet);
 }
