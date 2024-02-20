@@ -10,7 +10,15 @@
 //     // console.log(playgroundSection.classList);
 // }
 
+const audio = new Audio();
+
+let isGameOn = false;
+
+const artboard = document.getElementById('art-board');
+
 function handleKeyboardButtonPress(event){
+
+    if(isGameOn == false) return;
     const playerPressed = event.key;
 
     //stop the game is pressed 'Esc'
@@ -26,7 +34,8 @@ function handleKeyboardButtonPress(event){
     //check matched or not
     if(playerPressed === expectedAlphabet){
         console.log("You get a point");
-
+        audio.src = '../audio/success.mp3';
+        audio.play();
         const currentScore = getTextElementvalueById('current-score');
         console.log(currentScore);
         const updatedScore = currentScore + 1;
@@ -52,10 +61,22 @@ function handleKeyboardButtonPress(event){
         continueGame();
     }
     else{
+        audio.src = '../audio/wrong.mp3'
+        audio.play();
+
         console.log("You missed you lost a life");
+
+        
 
         const currentLife = getTextElementvalueById('current-life');
         const updatedLife = currentLife - 1;
+
+
+        const lifePercentend = (updatedLife / 5) * 100;
+
+        artboard.style.background = `linear-gradient(#FFFFFFB3 ${lifePercentend}%,red)`
+
+
         setTextElementValueById('current-life',updatedLife);
 
         if(updatedLife === 0){
@@ -94,7 +115,7 @@ function play(){
     //Hide everting show only the playground
     hiddenElementById('home-screen');
     showElementById('play-ground');
-
+    isGameOn = true;
     //reset score and life
     setTextElementValueById('current-life',5);
     setTextElementValueById('current-score' , 0);
@@ -118,4 +139,8 @@ function gameOver(){
     const currentAlphabet = getElementById('current-alphabet');
     // console.log(currentAlphabet);
     removeBackgroundColorById(currentAlphabet);
+    isGameOn = false;
+
+    artboard.style.background = `linear-gradient(#FFFFFFB3 100%,red)`
+
 }
